@@ -107,9 +107,9 @@ import smtplib
 from email.mime.text import MIMEText
 _user = "941903815@qq.com"
 _pwd  = "qkfcvmtacugdbfic"
-_to   = "1908539937@qq.com"
+_to   = "boy_johnney@163.com"
 
-message = u'hello'.encode('utf-8') + u'你好'.encode('utf-8') + u'good night'.encode('utf-8')
+message = u'hello'.encode('utf-8') + u'你好，这是来自天朝程序员的问候'.encode('utf-8') + u'good night'.encode('utf-8')
 
 msg = MIMEText(message)
 msg["Subject"] = u"你好".encode('utf-8')
@@ -117,7 +117,13 @@ msg["From"]    = _user
 msg["To"]      = _to
 
 try:
+    #not ssl port is 25
     s = smtplib.SMTP_SSL("smtp.qq.com", 465)
+    if s.ehlo()[0]>= 200 and s.ehlo()[0] <=299:
+        print "support TLS"
+    #if support starttls
+    print s.has_extn('starttls')
+    s.starttls()
     s.login(_user, _pwd)
     s.sendmail(_user, _to, msg.as_string())
     s.quit()
